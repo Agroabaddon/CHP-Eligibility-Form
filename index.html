@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eligibility Screening</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Eligibility Screening</h1>
+    <form id="eligibilityForm">
+      <label for="hc_id">HealthCall ID:</label>
+      <input type="text" id="hc_id" name="hc_id" placeholder="e.g. 12345">
+      
+      <label for="age">Your Age (years):</label>
+      <input type="number" id="age" name="age" min="0" placeholder="e.g. 34">
+
+      <label for="size">Household Size:</label>
+      <input type="number" id="size" name="size" min="1" value="1">
+
+      <label for="income">Annual Household Income ($):</label>
+      <input type="number" id="income" name="income" min="0" placeholder="e.g. 25000">
+
+      <label><input type="checkbox" id="pregnant" name="pregnant"> I am pregnant</label>
+      <label><input type="checkbox" id="veteran" name="veteran"> I am a veteran</label>
+    </form>
+
+    <div id="result">
+      <!-- Eligible programs will be listed here -->
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
