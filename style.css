@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-  max-width: 500px;
+  max-width: 540px;
   margin: 40px auto;
   padding: 32px 24px;
   background: #fff;
@@ -21,6 +21,39 @@ h1 {
   font-size: 2rem;
   color: #0366d6;
   letter-spacing: 1px;
+}
+
+.services-list {
+  margin: 30px 0 24px 0;
+  padding: 22px;
+  background: #f4f8fb;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(33,102,214,0.04);
+}
+
+.services-list h2 {
+  color: #155396;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
+.services-list .location {
+  font-weight: 400;
+  font-size: 1em;
+  color: #2369a1;
+}
+
+.services-list ul {
+  margin: 0;
+  padding-left: 22px;
+  color: #1a334d;
+}
+
+.services-list li {
+  margin: 7px 0;
+  font-size: 1em;
+  line-height: 1.5;
 }
 
 form {
@@ -69,7 +102,7 @@ input[type="checkbox"] {
   accent-color: #2188ff;
 }
 
-/* Stylish single button */
+/* Stylish button */
 button, input[type="submit"] {
   background: #0366d6;
   color: #fff;
