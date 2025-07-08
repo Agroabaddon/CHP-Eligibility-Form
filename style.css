@@ -1,0 +1,74 @@
+/* Basic reset and font */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  color: #333;
+}
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 15px;
+  background: #fff;
+  border-radius: 6px;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form layout */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+label {
+  font-weight: bold;
+}
+input[type="text"],
+input[type="number"] {
+  padding: 8px;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+}
+
+/* Result styles */
+#result {
+  margin-top: 20px;
+}
+#result h2 {
+  margin-bottom: 10px;
+}
+#result ul {
+  padding-left: 20px;
+}
+#result li {
+  margin: 6px 0;
+}
+
+/* Responsive tweaks */
+@media (min-width: 600px) {
+  /* make labels and inputs side-by-side on larger screens if desired */
+  form {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px 20px;
+  }
+  form label {
+    margin-top: 6px;
+    text-align: right;
+    padding-right: 10px;
+  }
+  #result ul {
+    padding-left: 30px;
+  }
+}
