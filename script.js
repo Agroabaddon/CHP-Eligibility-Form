@@ -8,91 +8,108 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function checkEligibility() {
-    const id = document.getElementById('hc_id').value.trim();
-    const age = parseInt(document.getElementById('age').value, 10);
-    const household = parseInt(document.getElementById('size').value, 10);
-    const income = parseFloat(document.getElementById('income').value);
-    const pregnant = document.getElementById('pregnant').checked;
-    const veteran = document.getElementById('veteran').checked;
+  const id = document.getElementById('hc_id').value.trim();
+  const age = parseInt(document.getElementById('age').value, 10);
+  const household = parseInt(document.getElementById('size').value, 10);
 
-    // Clear result if inputs are incomplete
-    if (isNaN(age) || isNaN(household) || isNaN(income)) {
-      resultDiv.innerHTML = '';
-      return;
-    }
+  // Gather all income fields
+  const annualInput = parseFloat(document.getElementById('income_annual').value);
+  const monthlyInput = parseFloat(document.getElementById('income_monthly').value);
+  const biweeklyInput = parseFloat(document.getElementById('income_biweekly').value);
+  const weeklyInput = parseFloat(document.getElementById('income_weekly').value);
 
-    // Compute thresholds
-    // SNAP: 130% FPL gross monthly (approx $1632 + $583*(n-1) per month)
-    const snapMonthly = 1632 + 583 * (household - 1);
-    const snapAnnualThreshold = snapMonthly * 12;
-
-    // Estimate FPL: $15,000 + $6,000 per additional person
-    const fpl = 15000 + 6000 * (household - 1);
-
-    // Medicaid: 138% of FPL
-    const medThreshold = fpl * 1.38;
-
-    // Determine eligibility
-    const eligiblePrograms = [];
-
-    // SNAP
-    if (income <= snapAnnualThreshold) {
-      eligiblePrograms.push('SNAP (Food Assistance)');
-    }
-
-    // Medicaid
-    if (income <= medThreshold) {
-      eligiblePrograms.push('Medicaid (Health Coverage)');
-    }
-
-    // TANF (assume household >1 means a dependent/family)
-    if (household > 1 && income <= fpl) {
-      eligiblePrograms.push('TANF (Cash Assistance for Families)');
-    }
-
-    // LIHEAP (up to ~150% FPL for energy bills)
-    if (income <= fpl * 1.5) {
-      eligiblePrograms.push('LIHEAP (Energy Bill Assistance)');
-    }
-
-    // WIC: for pregnant women or children <5, or categorical
-    const eligibleSnap = (income <= snapAnnualThreshold);
-    const eligibleMed = (income <= medThreshold);
-    const eligibleTanf = (household > 1 && income <= fpl);
-    if (pregnant || age < 5 || eligibleSnap || eligibleMed || eligibleTanf) {
-      eligiblePrograms.push('WIC (Women, Infants & Children Nutrition)');
-    }
-
-    // Section 8 (Housing Choice Voucher): assume income ≤2×FPL as low-income cutoff
-    if (income <= fpl * 2) {
-      eligiblePrograms.push('Section 8 (Housing Choice Vouchers)');
-    }
-
-    // HUD-VASH for homeless veterans
-    if (veteran) {
-      eligiblePrograms.push('HUD-VASH (Veterans Housing Assistance)');
-    }
-
-    // If no income-based program qualifies, suggest shelters
-    // (We exclude Food Bank which is always added below)
-    const hasService = eligiblePrograms.length > 0;
-    if (!hasService) {
-      eligiblePrograms.push('Local Emergency Shelters (if homeless)');
-    }
-
-    // Food banks/pantries are available to all in need
-    eligiblePrograms.push('Food Pantry / Food Bank (open to those in need)');
-
-    // Build HTML output
-    let html = '';
-    if (id) {
-      html += `<p><strong>HealthCall ID:</strong> ${id}</p>`;
-    }
-    html += '<h2>Eligible Programs:</h2><ul>';
-    eligiblePrograms.forEach(prog => {
-      html += `<li>${prog}</li>`;
-    });
-    html += '</ul>';
-    resultDiv.innerHTML = html;
+  // Convert to annual income, prioritizing annual > monthly > biweekly > weekly
+  let income = NaN;
+  if (!isNaN(annualInput) && annualInput > 0) {
+    income = annualInput;
+  } else if (!isNaN(monthlyInput) && monthlyInput > 0) {
+    income = monthlyInput * 12;
+  } else if (!isNaN(biweeklyInput) && biweeklyInput > 0) {
+    income = biweeklyInput * 26;
+  } else if (!isNaN(weeklyInput) && weeklyInput > 0) {
+    income = weeklyInput * 52;
   }
+
+  const pregnant = document.getElementById('pregnant').checked;
+  const veteran = document.getElementById('veteran').checked;
+
+  // Clear result if inputs are incomplete
+  if (isNaN(age) || isNaN(household) || isNaN(income)) {
+    resultDiv.innerHTML = '';
+    return;
+  }
+
+  // Compute thresholds
+  // SNAP: 130% FPL gross monthly (approx $1632 + $583*(n-1) per month)
+  const snapMonthly = 1632 + 583 * (household - 1);
+  const snapAnnualThreshold = snapMonthly * 12;
+
+  // Estimate FPL: $15,000 + $6,000 per additional person
+  const fpl = 15000 + 6000 * (household - 1);
+
+  // Medicaid: 138% of FPL
+  const medThreshold = fpl * 1.38;
+
+  // Determine eligibility
+  const eligiblePrograms = [];
+
+  // SNAP
+  if (income <= snapAnnualThreshold) {
+    eligiblePrograms.push('SNAP (Food Assistance)');
+  }
+
+  // Medicaid
+  if (income <= medThreshold) {
+    eligiblePrograms.push('Medicaid (Health Coverage)');
+  }
+
+  // TANF (assume household >1 means a dependent/family)
+  if (household > 1 && income <= fpl) {
+    eligiblePrograms.push('TANF (Cash Assistance for Families)');
+  }
+
+  // LIHEAP (up to ~150% FPL for energy bills)
+  if (income <= fpl * 1.5) {
+    eligiblePrograms.push('LIHEAP (Energy Bill Assistance)');
+  }
+
+  // WIC: for pregnant women or children <5, or categorical
+  const eligibleSnap = (income <= snapAnnualThreshold);
+  const eligibleMed = (income <= medThreshold);
+  const eligibleTanf = (household > 1 && income <= fpl);
+  if (pregnant || age < 5 || eligibleSnap || eligibleMed || eligibleTanf) {
+    eligiblePrograms.push('WIC (Women, Infants & Children Nutrition)');
+  }
+
+  // Section 8 (Housing Choice Voucher): income ≤2×FPL as low-income cutoff
+  if (income <= fpl * 2) {
+    eligiblePrograms.push('Section 8 (Housing Choice Vouchers)');
+  }
+
+  // HUD-VASH for homeless veterans
+  if (veteran) {
+    eligiblePrograms.push('HUD-VASH (Veterans Housing Assistance)');
+  }
+
+  // If no income-based program qualifies, suggest shelters
+  const hasService = eligiblePrograms.length > 0;
+  if (!hasService) {
+    eligiblePrograms.push('Local Emergency Shelters (if homeless)');
+  }
+
+  // Food banks/pantries are available to all in need
+  eligiblePrograms.push('Food Pantry / Food Bank (open to those in need)');
+
+  // Build HTML output
+  let html = '';
+  if (id) {
+    html += `<p><strong>HealthCall ID:</strong> ${id}</p>`;
+  }
+  html += '<h2>Eligible Programs:</h2><ul>';
+  eligiblePrograms.forEach(prog => {
+    html += `<li>${prog}</li>`;
+  });
+  html += '</ul>';
+  resultDiv.innerHTML = html;
+}
 });
