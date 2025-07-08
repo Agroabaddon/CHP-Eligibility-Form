@@ -2,45 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>CHP Eligibility Form</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Eligibility Screening</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Eligibility Screening</h1>
-    <<form id="eligibilityForm">
-  <label for="hc_id">HealthCall ID:</label>
-  <input type="text" id="hc_id" name="hc_id" placeholder="e.g. 12345">
+    <h1>CHP Eligibility Screening</h1>
+    <form id="eligibilityForm" autocomplete="off">
+      <label for="hc_id">HealthCall ID:</label>
+      <input type="text" id="hc_id" name="hc_id" placeholder="e.g. 12345">
 
-  <label for="age">Your Age (years):</label>
-  <input type="number" id="age" name="age" min="0" placeholder="e.g. 34">
+      <label for="age">Your Age (years):</label>
+      <input type="number" id="age" name="age" min="0" placeholder="e.g. 34">
 
-  <label for="size">Household Size:</label>
-  <input type="number" id="size" name="size" min="1" value="1">
+      <label for="size">Household Size:</label>
+      <input type="number" id="size" name="size" min="1" value="1">
 
-  <label for="income_annual">Annual Household Income ($):</label>
-  <input type="number" id="income_annual" name="income_annual" min="0" placeholder="e.g. 25000">
+      <label for="income_annual">Annual Household Income ($):</label>
+      <input type="number" id="income_annual" name="income_annual" min="0" placeholder="e.g. 25000">
 
-  <label for="income_monthly">Monthly Household Income ($):</label>
-  <input type="number" id="income_monthly" name="income_monthly" min="0" placeholder="e.g. 2100">
+      <label for="income_monthly">Monthly Household Income ($):</label>
+      <input type="number" id="income_monthly" name="income_monthly" min="0" placeholder="e.g. 2100">
 
-  <label for="income_biweekly">Biweekly Household Income ($):</label>
-  <input type="number" id="income_biweekly" name="income_biweekly" min="0" placeholder="e.g. 970">
+      <label for="income_biweekly">Biweekly Household Income ($):</label>
+      <input type="number" id="income_biweekly" name="income_biweekly" min="0" placeholder="e.g. 970">
 
-  <label for="income_weekly">Weekly Household Income ($):</label>
-  <input type="number" id="income_weekly" name="income_weekly" min="0" placeholder="e.g. 485">
+      <label for="income_weekly">Weekly Household Income ($):</label>
+      <input type="number" id="income_weekly" name="income_weekly" min="0" placeholder="e.g. 485">
 
-  <label><input type="checkbox" id="pregnant" name="pregnant"> I am pregnant</label>
-  <label><input type="checkbox" id="veteran" name="veteran"> I am a veteran</label>
-</form>
-      <label><input type="checkbox" id="pregnant" name="pregnant"> I am pregnant</label>
-      <label><input type="checkbox" id="veteran" name="veteran"> I am a veteran</label>
+      <div class="checkbox-row">
+        <label><input type="checkbox" id="pregnant" name="pregnant"> I am pregnant</label>
+        <label><input type="checkbox" id="veteran" name="veteran"> I am a veteran</label>
+      </div>
+
+      <button type="button" onclick="checkEligibility()">Check Eligibility</button>
     </form>
-
-    <div id="result">
-      <!-- Eligible programs will be listed here -->
-    </div>
+    <div id="result"></div>
   </div>
   <script src="script.js"></script>
 </body>
