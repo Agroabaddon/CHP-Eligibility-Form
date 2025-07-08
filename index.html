@@ -2,14 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CHP Eligibility Form</title>
+  <title>CHP Eligibility Form - Lee County, FL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
+  <script src="resources.js"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1>CHP Eligibility Screening</h1>
-    <form id="eligibilityForm" autocomplete="off">
+    <h1>CHP Community Resource Eligibility Screening</h1>
+    <div id="services-list" class="services-list"></div>
+    <form id="eligibilityForm" autocomplete="off" onsubmit="event.preventDefault(); checkEligibility();">
       <label for="hc_id">HealthCall ID:</label>
       <input type="text" id="hc_id" name="hc_id" placeholder="e.g. 12345">
 
@@ -36,10 +39,9 @@
         <label><input type="checkbox" id="veteran" name="veteran"> I am a veteran</label>
       </div>
 
-      <button type="button" onclick="checkEligibility()">Check Eligibility</button>
+      <button type="submit">Check Eligibility</button>
     </form>
     <div id="result"></div>
   </div>
-  <script src="script.js"></script>
 </body>
 </html>
