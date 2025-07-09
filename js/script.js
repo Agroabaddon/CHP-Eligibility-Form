@@ -2,13 +2,25 @@
 import { programs } from './Services.js';
 
 function collectHouseholdData() {
-  // TODO: replace with actual logic
-  return [];
+  const form = document.getElementById('eligibilityForm');
+  if (!form) return [];
+
+  const members = form.querySelectorAll('.member');
+  return Array.from(members).map(m => {
+    const ageInput = m.querySelector('input[name="age"]');
+    const snapInput = m.querySelector('input[name="snap"]');
+    const pregnantInput = m.querySelector('input[name="pregnant"]');
+    return {
+      age: ageInput ? parseInt(ageInput.value, 10) || 0 : 0,
+      snap: snapInput ? snapInput.checked : false,
+      pregnant: pregnantInput ? pregnantInput.checked : false,
+    };
+  });
 }
 
 function getClientIncomeAnnual() {
-  // TODO: replace with actual logic
-  return 0;
+  const incomeInput = document.querySelector('input[name="clientIncome"]');
+  return incomeInput ? Number(incomeInput.value) || 0 : 0;
 }
 
 export function checkEligibility() {
