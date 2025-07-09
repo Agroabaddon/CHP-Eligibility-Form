@@ -16,6 +16,28 @@ function getClientIncomeAnnual() {
   return incomeInput ? parseFloat(incomeInput.value) || 0 : 0;
 }
 
+function renderHouseholdSummary() {
+  const summaryEl = document.getElementById('household-summary');
+  if (!summaryEl) return;
+  const data = collectHouseholdData();
+  if (!data.length) {
+    summaryEl.innerHTML = '';
+    return;
+  }
+  const rows = data
+    .map((m, i) =>
+      `<tr><td>${i + 1}</td><td>${m.age}</td><td>${m.pregnant ? 'Yes' : 'No'}</td><td>${m.snap ? 'Yes' : 'No'}</td></tr>`
+    )
+    .join('');
+  summaryEl.innerHTML = `
+    <table>
+      <thead>
+        <tr><th>#</th><th>Age</th><th>Pregnant</th><th>SNAP</th></tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
 export function checkEligibility() {
   const data = {
     household: collectHouseholdData(),
@@ -33,12 +55,13 @@ export function checkEligibility() {
 // expose checkEligibility to the global scope for inline call
 window.checkEligibility = checkEligibility;
 
-// Dynamic member addition
+// Dynamic member addition and removal
 document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.getElementById('add-member');
-  if (!addBtn) return;
-  addBtn.addEventListener('click', () => {
-    const container = document.getElementById('members');
+  const container = document.getElementById('members');
+  if (!addBtn || !container) return;
+
+  const createMemberDiv = () => {
     const div = document.createElement('div');
     div.className = 'member compact-member';
     div.innerHTML = `
@@ -52,7 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
       <label>
         <input type="checkbox" name="snap">
         Receives SNAP
-      </label>`;
-    container.appendChild(div);
+      </label>
+      <button type="button" class="remove-member">Remove</button>`;
+    return div;
+  };
+
+  addBtn.addEventListener('click', () => {
+    container.appendChild(createMemberDiv());
+    renderHouseholdSummary();
   });
+
+  container.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-member')) {
+      e.target.closest('.member').remove();
+      renderHouseholdSummary();
+    }
+  });
+
+  renderHouseholdSummary();
 });
