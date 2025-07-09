@@ -23,11 +23,26 @@ export function checkEligibility() {
   };
   const resultDiv = document.getElementById('result');
   const qualified = programs.filter(p => p.isEligible(data));
+  // Clear previous results
+  resultDiv.innerHTML = '';
+
   if (!qualified.length) {
-    resultDiv.innerHTML = '<p>No qualifying programs found.</p>';
+    const p = document.createElement('p');
+    p.textContent = 'No qualifying programs found.';
+    resultDiv.appendChild(p);
     return;
   }
-  resultDiv.innerHTML = '<ul>' + qualified.map(p => `<li><b>${p.name}</b>: ${p.description}</li>`).join('') + '</ul>';
+
+  const ul = document.createElement('ul');
+  qualified.forEach(p => {
+    const li = document.createElement('li');
+    const bold = document.createElement('b');
+    bold.textContent = p.name;
+    li.appendChild(bold);
+    li.appendChild(document.createTextNode(`: ${p.description}`));
+    ul.appendChild(li);
+  });
+  resultDiv.appendChild(ul);
 }
 
 // expose checkEligibility to the global scope for inline call
@@ -41,18 +56,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('members');
     const div = document.createElement('div');
     div.className = 'member compact-member';
-    div.innerHTML = `
-      <label>Age
-        <input type="number" name="age" min="0" required>
-      </label>
-      <label>
-        <input type="checkbox" name="pregnant">
-        Pregnant
-      </label>
-      <label>
-        <input type="checkbox" name="snap">
-        Receives SNAP
-      </label>`;
+    const labelAge = document.createElement('label');
+    labelAge.textContent = 'Age ';
+    const inputAge = document.createElement('input');
+    inputAge.type = 'number';
+    inputAge.name = 'age';
+    inputAge.min = '0';
+    inputAge.required = true;
+    labelAge.appendChild(inputAge);
+
+    const labelPregnant = document.createElement('label');
+    const inputPregnant = document.createElement('input');
+    inputPregnant.type = 'checkbox';
+    inputPregnant.name = 'pregnant';
+    labelPregnant.appendChild(inputPregnant);
+    labelPregnant.appendChild(document.createTextNode(' Pregnant'));
+
+    const labelSnap = document.createElement('label');
+    const inputSnap = document.createElement('input');
+    inputSnap.type = 'checkbox';
+    inputSnap.name = 'snap';
+    labelSnap.appendChild(inputSnap);
+    labelSnap.appendChild(document.createTextNode(' Receives SNAP'));
+
+    div.appendChild(labelAge);
+    div.appendChild(labelPregnant);
+    div.appendChild(labelSnap);
+
     container.appendChild(div);
   });
 });
