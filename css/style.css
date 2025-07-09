@@ -1,0 +1,68 @@
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f6fafb;
+  margin: 0;
+}
+.container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #2221;
+}
+h1, h2 {
+  margin-bottom: 0.5em;
+}
+form > div {
+  margin-bottom: 1em;
+}
+input[type="number"], select {
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 0.5em;
+}
+button[type="button"], button[type="submit"] {
+  background: #026aa7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5em;
+}
+button[type="button"]:hover, button[type="submit"]:hover {
+  background: #01456e;
+}
+.member.compact-member {
+  background: #f5f7fa;
+  padding: 0.5em 0.5em 0.2em 0.5em;
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+  border: 1px solid #e0e5ea;
+}
+#household-summary {
+  margin-top: 1em;
+}
+#household-summary table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 0.5em;
+}
+#household-summary th, #household-summary td {
+  border: 1px solid #d7dbe0;
+  padding: 0.25em 0.5em;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 1em;
+  }
+  .member.compact-member div {
+    flex-direction: column;
+    gap: 0.3em;
+  }
+}
