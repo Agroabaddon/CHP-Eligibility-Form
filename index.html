@@ -13,7 +13,7 @@
     <h1>CHP Community Resource Eligibility Screening</h1>
     <a href="resources.html" class="back-link" style="margin-bottom:20px;display:inline-block;">View All Community Resources &rarr;</a>
 
-    <form id="eligibilityForm" autocomplete="off" onsubmit="event.preventDefault(); checkEligibility();">
+    <form onsubmit="event.preventDefault(); checkEligibility();"  id="eligibilityForm" autocomplete="off" onsubmit="event.preventDefault(); checkEligibility();">
       <label for="hc_id">HealthCall ID:</label>
       <input type="text" id="hc_id" name="hc_id" placeholder="e.g. 12345">
 
@@ -41,7 +41,14 @@
       </div>
 
       <button type="submit">Check Eligibility</button>
-    </form>
+    <h2>Household Members</h2>
+<div id="household-container"></div>
+<button type="button" onclick="addHouseholdMember()">Add Household Member</button>
+<br><br>
+<label>Total Household Income (Annual):</label>
+<input type="number" id="income" required>
+</form>
+<div id="result"></div>
     <div id="result"></div>
   </div>
 </body>

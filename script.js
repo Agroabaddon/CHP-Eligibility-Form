@@ -81,3 +81,75 @@ function populateServicesList() {
 
 // On page load, populate the services list
 window.onload = populateServicesList;
+
+
+let household = [];
+
+function addHouseholdMember() {
+  const container = document.getElementById('household-container');
+  const index = household.length;
+
+  const memberDiv = document.createElement('div');
+  memberDiv.classList.add('member');
+  memberDiv.innerHTML = `
+    <h4>Member ${index + 1}</h4>
+    Age: <input type="number" name="age${index}" min="0"><br>
+    <label><input type="checkbox" name="disabled${index}"> Disabled</label>
+    <label><input type="checkbox" name="veteran${index}"> Veteran</label>
+    <label><input type="checkbox" name="pregnant${index}"> Pregnant</label>
+    <hr>
+  `;
+  container.appendChild(memberDiv);
+
+  household.push({});
+}
+
+function collectHouseholdData() {
+  const members = [];
+  const container = document.getElementById('household-container');
+  const divs = container.getElementsByClassName('member');
+
+  for (let i = 0; i < divs.length; i++) {
+    const age = parseInt(divs[i].querySelector(`input[name=age${i}]`).value) || 0;
+    const disabled = divs[i].querySelector(`input[name=disabled${i}]`).checked;
+    const veteran = divs[i].querySelector(`input[name=veteran${i}]`).checked;
+    const pregnant = divs[i].querySelector(`input[name=pregnant${i}]`).checked;
+    members.push({ age, disabled, veteran, pregnant });
+  }
+  return members;
+}
+
+function calculateFPL(percent, size) {
+  const base = 15000 + 6000 * (size - 1);
+  return (base * percent) / 100;
+}
+
+function isEligibleForSeniorAid(data) {
+  const hasSenior = data.household.some(m => m.age >= 60);
+  return hasSenior && data.totalIncome < calculateFPL(200, data.household.length);
+}
+
+function checkEligibility() {
+  household = collectHouseholdData();
+  const income = parseFloat(document.getElementById('income').value) || 0;
+
+  const eligibilityData = {
+    household,
+    totalIncome: income,
+    incomeFrequency: 'annual',
+    housingStatus: document.getElementById('housingStatus')?.value || '',
+    benefits: [],
+    county: 'lee'
+  };
+
+  const eligible = [];
+
+  if (isEligibleForSeniorAid(eligibilityData)) {
+    eligible.push("Senior Aid Program");
+  }
+
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = eligible.length
+    ? `<ul>${eligible.map(p => `<li>${p}</li>`).join('')}</ul>`
+    : `<p>No eligible programs found.</p>`;
+}
