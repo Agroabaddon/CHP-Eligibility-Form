@@ -12,7 +12,32 @@
   <div class="container">
     <h1>CHP Community Resource Eligibility Screening</h1>
     <form id="eligibilityForm" onsubmit="event.preventDefault(); checkEligibility();">
-      <!-- form fields... -->
+      <div id="members">
+        <h2>Household Members</h2>
+        <div class="member compact-member">
+          <label>Age
+            <input type="number" name="age" min="0" required>
+          </label>
+          <label>
+            <input type="checkbox" name="pregnant">
+            Pregnant
+          </label>
+          <label>
+            <input type="checkbox" name="snap">
+            Receives SNAP
+          </label>
+        </div>
+      </div>
+      <div>
+        <button type="button" id="add-member">Add Member</button>
+      </div>
+      <div id="household-summary"></div>
+      <div>
+        <label for="incomeAnnual">Annual Household Income ($)
+          <input type="number" id="incomeAnnual" name="incomeAnnual" min="0" required>
+        </label>
+      </div>
+      <button type="submit">Check Eligibility</button>
     </form>
     <div id="result" style="margin-top:2em;"></div>
     <nav>
