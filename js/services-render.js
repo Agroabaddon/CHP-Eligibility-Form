@@ -7,5 +7,12 @@ const programs = [...basePrograms, ...storedPrograms];
 
 document.addEventListener('DOMContentLoaded', () => {
   const list = document.getElementById('program-list');
-  list.innerHTML = programs.map(p => `<li><b>${p.name}</b>: ${p.description}</li>`).join('');
+  programs.forEach(p => {
+    const li = document.createElement('li');
+    const bold = document.createElement('b');
+    bold.textContent = p.name;
+    li.appendChild(bold);
+    li.appendChild(document.createTextNode(`: ${p.description}`));
+    list.appendChild(li);
+  });
 });

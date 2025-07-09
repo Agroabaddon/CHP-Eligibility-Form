@@ -17,12 +17,24 @@ export function checkEligibility() {
     clientIncome: getClientIncomeAnnual(),
   };
   const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = '';
   const qualified = programs.filter(p => p.isEligible(data));
   if (!qualified.length) {
-    resultDiv.innerHTML = '<p>No qualifying programs found.</p>';
+    const p = document.createElement('p');
+    p.textContent = 'No qualifying programs found.';
+    resultDiv.appendChild(p);
     return;
   }
-  resultDiv.innerHTML = '<ul>' + qualified.map(p => `<li><b>${p.name}</b>: ${p.description}</li>`).join('') + '</ul>';
+  const ul = document.createElement('ul');
+  qualified.forEach(p => {
+    const li = document.createElement('li');
+    const bold = document.createElement('b');
+    bold.textContent = p.name;
+    li.appendChild(bold);
+    li.appendChild(document.createTextNode(`: ${p.description}`));
+    ul.appendChild(li);
+  });
+  resultDiv.appendChild(ul);
 }
 
 // expose checkEligibility to the global scope for inline call
