@@ -2,33 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Community Resources - Lee County, FL</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Program Resources - CHP</title>
   <link rel="stylesheet" href="style.css">
-  <script src="resources.js"></script>
-  <style>
-    .container { max-width: 700px; }
-    .back-link { margin-bottom: 20px; display: inline-block; color: #0366d6; text-decoration: underline;}
-    .back-link:hover { color: #024fa2; }
-  </style>
 </head>
 <body>
   <div class="container">
-    <a href="suggest.html" class="back-link" style="margin-bottom:20px;display:inline-block;">Suggest a New Resource &rarr;</a>
-    <a href="index.html" class="back-link">&larr; Back to Eligibility Screening</a>
-    <h1>Community Resources<br><span style="font-size:1.1rem;color:#2369a1;">Lee County, FL</span></h1>
-    <div id="all-resources-list" class="services-list"></div>
+    <h1>Available Social Service Programs</h1>
+    <ul>
+      <li><b>SNAP:</b> Supplemental Nutrition Assistance Program</li>
+      <li><b>WIC:</b> Women, Infants, and Children</li>
+      <!-- Add others to match resources.js -->
+    </ul>
+    <a href="index.html">Back to Eligibility Form</a>
   </div>
-  <script>
-    function showAllResources() {
-      let html = '<ul>';
-      resources.forEach(r => {
-        html += `<li><strong>${r.name}</strong>: ${r.description}</li>`;
-      });
-      html += '</ul>';
-      document.getElementById('all-resources-list').innerHTML = html;
-    }
-    window.onload = showAllResources;
-  </script>
 </body>
 </html>

@@ -1,87 +1,3 @@
-// script.js
-
-// Load resources.js before this script!
-
-function getUserData() {
-  const age = parseInt(document.getElementById('age').value, 10);
-  const household = parseInt(document.getElementById('size').value, 10);
-
-  // Gather all income fields
-  const annualInput = parseFloat(document.getElementById('income_annual').value);
-  const monthlyInput = parseFloat(document.getElementById('income_monthly').value);
-  const biweeklyInput = parseFloat(document.getElementById('income_biweekly').value);
-  const weeklyInput = parseFloat(document.getElementById('income_weekly').value);
-
-  // Convert to annual income, prioritizing annual > monthly > biweekly > weekly
-  let income = NaN;
-  if (!isNaN(annualInput) && annualInput > 0) {
-    income = annualInput;
-  } else if (!isNaN(monthlyInput) && monthlyInput > 0) {
-    income = monthlyInput * 12;
-  } else if (!isNaN(biweeklyInput) && biweeklyInput > 0) {
-    income = biweeklyInput * 26;
-  } else if (!isNaN(weeklyInput) && weeklyInput > 0) {
-    income = weeklyInput * 52;
-  }
-
-  // Compute thresholds for use in resource logic
-  const snapMonthly = 1632 + 583 * (household - 1);
-  const snapAnnualThreshold = snapMonthly * 12;
-  const fpl = 15000 + 6000 * (household - 1);
-  const medThreshold = fpl * 1.38;
-
-  return {
-    id: document.getElementById('hc_id').value.trim(),
-    age,
-    household,
-    income,
-    pregnant: document.getElementById('pregnant').checked,
-    veteran: document.getElementById('veteran').checked,
-    snapAnnualThreshold,
-    fpl,
-    medThreshold
-  };
-}
-
-function checkEligibility() {
-  const data = getUserData();
-  const resultDiv = document.getElementById('result');
-  if (isNaN(data.age) || isNaN(data.household) || isNaN(data.income)) {
-    resultDiv.innerHTML = '<p style="color:#d32f2f;">Please fill out age, household size, and at least one income field.</p>';
-    return;
-  }
-
-  // Find eligible programs
-  const eligiblePrograms = resources.filter(resource => resource.isEligible(data));
-
-  // Output result
-  let html = '';
-  if (data.id) {
-    html += `<p><strong>HealthCall ID:</strong> ${data.id}</p>`;
-  }
-  html += '<h2>Eligible Programs & Services:</h2><ul>';
-  eligiblePrograms.forEach(prog => {
-    html += `<li><strong>${prog.name}:</strong> ${prog.description}</li>`;
-  });
-  html += '</ul>';
-  resultDiv.innerHTML = html;
-}
-
-// Dynamically populate the "Services We Check" list
-function populateServicesList() {
-  const listDiv = document.getElementById('services-list');
-  if (!listDiv) return;
-  let html = '<h2>Programs & Services We Check <span class="location">(Lee County, FL)</span>:</h2><ul>';
-  resources.forEach(r => {
-    html += `<li><strong>${r.name}</strong>: ${r.description}</li>`;
-  });
-  html += '</ul>';
-  listDiv.innerHTML = html;
-}
-
-// On page load, populate the services list
-window.onload = populateServicesList;
-
 
 let household = [];
 
@@ -90,18 +6,31 @@ function addHouseholdMember() {
   const index = household.length;
 
   const memberDiv = document.createElement('div');
-  memberDiv.classList.add('member');
+  memberDiv.classList.add('member', 'compact-member');
   memberDiv.innerHTML = `
-    <h4>Member ${index + 1}</h4>
-    Age: <input type="number" name="age${index}" min="0"><br>
-    <label><input type="checkbox" name="disabled${index}"> Disabled</label>
-    <label><input type="checkbox" name="veteran${index}"> Veteran</label>
-    <label><input type="checkbox" name="pregnant${index}"> Pregnant</label>
-    <hr>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5em; margin-bottom:0.25em;">
+      <label>Age: <input type="number" min="0" name="age${index}" style="width:3em;"></label>
+      <label><input type="checkbox" name="disabled${index}"> Disabled</label>
+      <label><input type="checkbox" name="veteran${index}"> Veteran</label>
+      <label><input type="checkbox" name="pregnant${index}"> Pregnant</label>
+      <label><input type="checkbox" name="snap${index}"> SNAP</label>
+      <label>
+        Income: <input type="number" min="0" name="income${index}" style="width:5em;">
+        <select name="freq${index}">
+          <option value="annual">Annual</option>
+          <option value="monthly">Monthly</option>
+          <option value="biweekly">Biweekly</option>
+          <option value="weekly">Weekly</option>
+        </select>
+      </label>
+    </div>
   `;
   container.appendChild(memberDiv);
+  household.push({}); // Placeholder
 
-  household.push({});
+  memberDiv.addEventListener('input', updateHouseholdSummary);
+  memberDiv.addEventListener('change', updateHouseholdSummary);
+  updateHouseholdSummary();
 }
 
 function collectHouseholdData() {
@@ -114,42 +43,65 @@ function collectHouseholdData() {
     const disabled = divs[i].querySelector(`input[name=disabled${i}]`).checked;
     const veteran = divs[i].querySelector(`input[name=veteran${i}]`).checked;
     const pregnant = divs[i].querySelector(`input[name=pregnant${i}]`).checked;
-    members.push({ age, disabled, veteran, pregnant });
+    const snap = divs[i].querySelector(`input[name=snap${i}]`).checked;
+    const income = parseFloat(divs[i].querySelector(`input[name=income${i}]`).value) || 0;
+    const freq = divs[i].querySelector(`select[name=freq${i}]`).value;
+    members.push({ age, disabled, veteran, pregnant, snap, income, freq });
   }
   return members;
 }
 
-function calculateFPL(percent, size) {
-  const base = 15000 + 6000 * (size - 1);
-  return (base * percent) / 100;
+function getClientIncomeAnnual() {
+  const amount = parseFloat(document.getElementById('client-income').value) || 0;
+  const freq = document.getElementById('client-income-freq').value;
+  if (freq === 'annual') return amount;
+  if (freq === 'monthly') return amount * 12;
+  if (freq === 'biweekly') return amount * 26;
+  if (freq === 'weekly') return amount * 52;
+  return amount;
 }
 
-function isEligibleForSeniorAid(data) {
-  const hasSenior = data.household.some(m => m.age >= 60);
-  return hasSenior && data.totalIncome < calculateFPL(200, data.household.length);
+function updateHouseholdSummary() {
+  const members = collectHouseholdData();
+  const summaryDiv = document.getElementById('household-summary');
+  const amount = document.getElementById('client-income').value;
+  const freq = document.getElementById('client-income-freq').value;
+  let html = `<div><b>Client Income:</b> ${amount ? '$' + amount + ' / ' + freq : '<em>None entered</em>'}</div>`;
+
+  if (!members.length) {
+    html += "<em>No household members entered yet.</em>";
+    summaryDiv.innerHTML = html;
+    return;
+  }
+  html += `<table><tr>
+    <th>#</th><th>Age</th><th>Disabled</th><th>Veteran</th><th>Pregnant</th><th>SNAP</th><th>Income</th>
+  </tr>`;
+  members.forEach((m, i) => {
+    html += `<tr>
+      <td>${i + 1}</td>
+      <td>${m.age ? m.age : ''}</td>
+      <td>${m.disabled ? "✔️" : ""}</td>
+      <td>${m.veteran ? "✔️" : ""}</td>
+      <td>${m.pregnant ? "✔️" : ""}</td>
+      <td>${m.snap ? "✔️" : ""}</td>
+      <td>${m.income ? "$" + m.income + " / " + (m.freq || "") : ""}</td>
+    </tr>`;
+  });
+  html += "</table>";
+  summaryDiv.innerHTML = html;
 }
 
 function checkEligibility() {
   household = collectHouseholdData();
-  const income = parseFloat(document.getElementById('income').value) || 0;
+  const clientIncome = getClientIncomeAnnual();
 
+  // You can add your eligibility logic here
   const eligibilityData = {
     household,
-    totalIncome: income,
-    incomeFrequency: 'annual',
-    housingStatus: document.getElementById('housingStatus')?.value || '',
-    benefits: [],
-    county: 'lee'
+    clientIncome,
   };
 
-  const eligible = [];
-
-  if (isEligibleForSeniorAid(eligibilityData)) {
-    eligible.push("Senior Aid Program");
-  }
-
+  // Placeholder result output
   const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = eligible.length
-    ? `<ul>${eligible.map(p => `<li>${p}</li>`).join('')}</ul>`
-    : `<p>No eligible programs found.</p>`;
+  resultDiv.innerHTML = `<pre>${JSON.stringify(eligibilityData, null, 2)}</pre>`;
 }

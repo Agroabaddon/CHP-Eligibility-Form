@@ -1,180 +1,68 @@
+
 body {
+  font-family: system-ui, sans-serif;
+  background: #f6fafb;
   margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f6f8fa;
-  color: #222;
 }
-
 .container {
-  max-width: 540px;
-  margin: 40px auto;
-  padding: 32px 24px;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1.5px 4px rgba(0,0,0,0.04);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #2221;
 }
-
-h1 {
-  text-align: center;
-  margin-bottom: 32px;
-  font-size: 2rem;
-  color: #0366d6;
-  letter-spacing: 1px;
+h1, h2 {
+  margin-bottom: 0.5em;
 }
-
-.services-list {
-  margin: 30px 0 24px 0;
-  padding: 22px;
-  background: #f4f8fb;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(33,102,214,0.04);
+form > div {
+  margin-bottom: 1em;
 }
-
-.services-list h2 {
-  color: #155396;
-  margin-bottom: 12px;
-  font-size: 1.2rem;
-  text-align: left;
+input[type="number"], select {
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 0.5em;
 }
-
-.services-list .location {
-  font-weight: 400;
-  font-size: 1em;
-  color: #2369a1;
-}
-
-.services-list ul {
-  margin: 0;
-  padding-left: 22px;
-  color: #1a334d;
-}
-
-.services-list li {
-  margin: 7px 0;
-  font-size: 1em;
-  line-height: 1.5;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-label {
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #333a;
-}
-
-input[type="text"],
-input[type="number"] {
-  padding: 10px 12px;
-  font-size: 1em;
-  border: 1.5px solid #d1d5da;
-  border-radius: 6px;
-  box-sizing: border-box;
-  transition: border 0.2s;
-  background: #f8fafb;
-}
-input[type="text"]:focus,
-input[type="number"]:focus {
-  border: 1.5px solid #2188ff;
-  outline: none;
-  background: #fff;
-}
-
-.checkbox-row {
-  display: flex;
-  gap: 24px;
-  margin-top: 8px;
-}
-.checkbox-row label {
-  font-weight: 400;
-  color: #333;
-  display: flex;
-  align-items: center;
-}
-input[type="checkbox"] {
-  margin-right: 7px;
-  transform: scale(1.1);
-  accent-color: #2188ff;
-}
-
-/* Stylish button */
-button, input[type="submit"] {
-  background: #0366d6;
+button[type="button"], button[type="submit"] {
+  background: #026aa7;
   color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 13px 0;
-  font-size: 1.1em;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  margin-top: 10px;
+  padding: 0.5em 1.2em;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.18s;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(33,102,214,0.04);
+  margin-top: 0.5em;
 }
-button:hover, input[type="submit"]:hover {
-  background: #024fa2;
+button[type="button"]:hover, button[type="submit"]:hover {
+  background: #01456e;
 }
-
-#result {
-  margin-top: 30px;
-  padding: 18px;
-  border-radius: 7px;
-  background: #eaf5ff;
-  box-shadow: 0 1px 2px rgba(33,136,255,0.04);
-  color: #155396;
-}
-
-#result h2 {
-  margin-bottom: 10px;
-  color: #2188ff;
-  font-size: 1.2rem;
-}
-
-#result ul {
-  padding-left: 22px;
-}
-
-#result li {
-  margin: 7px 0;
-  line-height: 1.5;
-}
-
-@media (min-width: 600px) {
-  form {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 14px 24px;
-  }
-  form label {
-    margin-top: 7px;
-    text-align: right;
-    padding-right: 12px;
-  }
-  .checkbox-row {
-    grid-column: 1 / span 2;
-    gap: 36px;
-    margin-top: 0;
-    justify-content: flex-start;
-  }
-  button, input[type="submit"] {
-    grid-column: 1 / span 2;
-  }
-  #result ul {
-    padding-left: 30px;
-  }
-}
-
-
-.member {
-  background: #f5f5f5;
-  padding: 1rem;
-  margin-bottom: 1rem;
+.member.compact-member {
+  background: #f5f7fa;
+  padding: 0.5em 0.5em 0.2em 0.5em;
   border-radius: 8px;
+  margin-bottom: 0.5em;
+  border: 1px solid #e0e5ea;
+}
+#household-summary {
+  margin-top: 1em;
+}
+#household-summary table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 0.5em;
+}
+#household-summary th, #household-summary td {
+  border: 1px solid #d7dbe0;
+  padding: 0.25em 0.5em;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 1em;
+  }
+  .member.compact-member div {
+    flex-direction: column;
+    gap: 0.3em;
+  }
 }

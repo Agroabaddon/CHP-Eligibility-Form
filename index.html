@@ -11,45 +11,31 @@
 <body>
   <div class="container">
     <h1>CHP Community Resource Eligibility Screening</h1>
-    <a href="resources.html" class="back-link" style="margin-bottom:20px;display:inline-block;">View All Community Resources &rarr;</a>
-
-    <form onsubmit="event.preventDefault(); checkEligibility();"  id="eligibilityForm" autocomplete="off" onsubmit="event.preventDefault(); checkEligibility();">
-      <label for="hc_id">HealthCall ID:</label>
-      <input type="text" id="hc_id" name="hc_id" placeholder="e.g. 12345">
-
-      <label for="age">Your Age (years):</label>
-      <input type="number" id="age" name="age" min="0" placeholder="e.g. 34">
-
-      <label for="size">Household Size:</label>
-      <input type="number" id="size" name="size" min="1" value="1">
-
-      <label for="income_annual">Annual Household Income ($):</label>
-      <input type="number" id="income_annual" name="income_annual" min="0" placeholder="e.g. 25000">
-
-      <label for="income_monthly">Monthly Household Income ($):</label>
-      <input type="number" id="income_monthly" name="income_monthly" min="0" placeholder="e.g. 2100">
-
-      <label for="income_biweekly">Biweekly Household Income ($):</label>
-      <input type="number" id="income_biweekly" name="income_biweekly" min="0" placeholder="e.g. 970">
-
-      <label for="income_weekly">Weekly Household Income ($):</label>
-      <input type="number" id="income_weekly" name="income_weekly" min="0" placeholder="e.g. 485">
-
-      <div class="checkbox-row">
-        <label><input type="checkbox" id="pregnant" name="pregnant"> I am pregnant</label>
-        <label><input type="checkbox" id="veteran" name="veteran"> I am a veteran</label>
+    <form id="eligibilityForm" onsubmit="event.preventDefault(); checkEligibility();">
+      <!-- Client Income Section -->
+      <div id="client-income-section" style="margin-bottom:1em;">
+        <label>
+          <b>Client/Applicant Income:</b>
+          <input type="number" id="client-income" min="0" style="width:5em;">
+          <select id="client-income-freq">
+            <option value="annual">Annual</option>
+            <option value="monthly">Monthly</option>
+            <option value="biweekly">Biweekly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </label>
       </div>
-
+      <!-- Household Section -->
+      <div id="household-section">
+        <h2>Household Members</h2>
+        <div id="household-container" class="compact-members"></div>
+        <button type="button" onclick="addHouseholdMember()">Add Household Member</button>
+      </div>
+      <br>
       <button type="submit">Check Eligibility</button>
-    <h2>Household Members</h2>
-<div id="household-container"></div>
-<button type="button" onclick="addHouseholdMember()">Add Household Member</button>
-<br><br>
-<label>Total Household Income (Annual):</label>
-<input type="number" id="income" required>
-</form>
-<div id="result"></div>
-    <div id="result"></div>
+      <div id="household-summary" style="margin-top:1em;"></div>
+    </form>
+    <div id="result" style="margin-top:2em;"></div>
   </div>
 </body>
 </html>
