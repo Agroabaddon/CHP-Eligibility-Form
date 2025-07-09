@@ -1,6 +1,6 @@
 
 // Example programs; add your own or modify as needed!
-const programs = [
+export const programs = [
   {
     name: "SNAP",
     description: "Supplemental Nutrition Assistance Program",
