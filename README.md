@@ -17,6 +17,8 @@
 3. Push to GitHub Pages (or any static host).
 4. Open `index.html` in your browser.
 
+This project is licensed under the [MIT License](LICENSE).
+
 ## Adding a New Program
 - Navigate to **Add New Program**.
 - Fill out the form and submit—it will appear under Programs.
