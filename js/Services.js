@@ -1,6 +1,6 @@
 
 // Example programs; add your own or modify as needed!
-const programs = [
+export const programs = [
   {
     name: "SNAP",
     description: "Supplemental Nutrition Assistance Program",
@@ -26,7 +26,7 @@ const programs = [
 ];
 
 // FPL calculation (match script.js if needed)
-function calculateFPL(percent, size) {
+export function calculateFPL(percent, size) {
   const base = 15000 + 6000 * (size - 1);
   return (base * percent) / 100;
 }

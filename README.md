@@ -23,3 +23,14 @@
 
 ## Customizing Eligibility Logic
 - Edit `/js/Services.js` to modify criteria in each program's `isEligible()`.
+
+## Running Tests
+This project uses Node's built-in test runner. After cloning the repo and
+installing Node 20 or later, run:
+
+```bash
+npm test
+```
+
+All tests in the `test/` directory will execute and verify the sample
+eligibility logic.
