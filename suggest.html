@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Suggest a Community Resource</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .container { max-width: 540px; }
+    .back-link { margin-bottom: 20px; display: inline-block; color: #0366d6; text-decoration: underline;}
+    .back-link:hover { color: #024fa2; }
+    form input, form button { margin-bottom: 12px; width: 100%; }
+    #suggestionMsg { color: #2188ff; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="resources.html" class="back-link">&larr; Back to Resource List</a>
+    <h1>Suggest a New Resource</h1>
+    <form id="suggestResourceForm">
+      <input type="text" id="resourceName" placeholder="Resource Name" required>
+      <input type="text" id="resourceDesc" placeholder="Description" required>
+      <button type="submit">Submit</button>
+      <p id="suggestionMsg"></p>
+    </form>
+  </div>
+  <script>
+    document.getElementById('suggestResourceForm').onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('resourceName').value.trim();
+      const desc = document.getElementById('resourceDesc').value.trim();
+      // TODO: Replace these with your repo info!
+      const owner = 'YOUR_GITHUB_USERNAME_OR_ORG';
+      const repo = 'YOUR_REPO_NAME';
+      const title = encodeURIComponent(`[Resource Suggestion] ${name}`);
+      const body = encodeURIComponent(`**Resource Name:** ${name}\n**Description:** ${desc}\n\n_Added via the suggestion form_`);
+      window.open(`https://github.com/${owner}/${repo}/issues/new?title=${title}&body=${body}`, '_blank');
+      document.getElementById('suggestionMsg').textContent = "A new tab will open for your suggestion. Thank you!";
+      document.getElementById('suggestResourceForm').reset();
+    };
+  </script>
+</body>
+</html>
